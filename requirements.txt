@@ -6,4 +6,3 @@ Werkzeug==3.0.1
 
 
 
-Se realizaron unas mejoras el proyecto, anteriormente era un software en HTML con CSS y estatico, donde solo nos mostraba una calculadora se agregaban los valores y nos daba el resultado, ahora este evoluciono usando Python como Backend y haciendola mas intuitiba y dinamica, sele agregaron las vistas registro, login y actualizar datos, como BD usamos mongoDB atlas ya qu ees una base de datos no relacional
