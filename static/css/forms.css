@@ -1,0 +1,37 @@
+.progress {
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--bs-gray-200);
+}
+
+.progress-bar {
+  background-color: var(--bs-primary);
+  transition: width 0.6s ease;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+}
+
+.btn-calculator {
+  min-width: 200px;
+}
+
+/* Tema oscuro */
+[data-theme="dark"] .progress {
+  background-color: var(--bs-gray-700);
+}
+
+[data-theme="dark"] .progress-bar {
+  background-color: var(--bs-primary);
+}
+
+[data-theme="dark"] .card-title {
+  color: var(--bs-light);
+}
+
+[data-theme="dark"] .card-header {
+  background-color: var(--bs-dark);
+  border-bottom: 1px solid var(--bs-gray-700);
+}

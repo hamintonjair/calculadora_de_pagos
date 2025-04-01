@@ -1,0 +1,45 @@
+.footer {
+  background-color: var(--bs-dark);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+}
+
+.footer-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bs-light);
+}
+
+.developer-name {
+  font-size: 0.9rem;
+  color: var(--bs-light);
+}
+
+.developer-links a {
+  color: var(--bs-light);
+  margin: 0 0.3rem;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.developer-links a:hover {
+  color: var(--bs-primary);
+}
+
+.copyright {
+  font-size: 0.8rem;
+  color: var(--bs-light);
+}
+
+/* Tema claro */
+[data-theme="light"] .footer {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+}
+
+/* Tema oscuro */
+[data-theme="dark"] .footer {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+}

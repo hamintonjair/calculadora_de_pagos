@@ -1,0 +1,235 @@
+{% extends "base.html" %} {% block title %}Registro - Calculadora{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title text-center mb-4">Crear Cuenta</h3>
+          <div class="progress mb-4 d-none" id="registerProgress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" title="Cargando..."></div>
+          </div>
+          <form method="POST" id="registerForm" action="{{ url_for('registro') }}" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre"
+                name="nombre"
+                placeholder="Tu nombre"
+                pattern="[A-Za-zÁáÉéÍíÓóÚúÑñ\s]{2,50}"
+                required
+              />
+              <div class="invalid-feedback">
+                El nombre debe tener entre 2 y 50 caracteres y solo puede contener letras.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="apellido" class="form-label">Apellidos</label>
+              <input
+                type="text"
+                class="form-control"
+                id="apellido"
+                name="apellido"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="cedula" class="form-label">Cédula</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cedula"
+                name="cedula"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="ejemplo@correo.com"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                required
+              />
+              <div class="invalid-feedback">
+                Por favor ingresa un correo electrónico válido.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="telefono"
+                name="telefono"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="direccion" class="form-label">Dirección</label>
+              <textarea
+                class="form-control"
+                id="direccion"
+                name="direccion"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Crea una contraseña"
+                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                required
+              />
+              <div class="invalid-feedback">
+                La contraseña debe tener al menos 8 caracteres, una letra y un número.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Confirma tu contraseña"
+                required
+              />
+              <div class="invalid-feedback">
+                Las contraseñas no coinciden.
+              </div>
+            </div>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+              <a href="{{ url_for('login') }}" class="btn btn-secondary w-50">Volver</a>
+              <button type="submit" class="btn btn-primary w-50">Crear Cuenta</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer py-1">
+  <div class="container">
+    <div class="row text-center align-items-center g-0">
+      <div class="col-md-4">
+        <div class="developer-section">
+          <p class="developer-name mb-0 d-inline-block">Jhordan Solis</p>
+          <div class="developer-links d-inline-block ms-2">
+            <a href="https://github.com/yordansolis" target="_blank" rel="noopener noreferrer" title="GitHub de Jhordan">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/jhordan-solis/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Jhordan">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <p class="copyright mb-0">&copy; 2024 Calculadora de Pagos</p>
+      </div>
+      <div class="col-md-4">
+        <div class="developer-section">
+          <p class="developer-name mb-0 d-inline-block">Haminton Mena</p>
+          <div class="developer-links d-inline-block ms-2">
+            <a href="https://github.com/hamintonjair" target="_blank" rel="noopener noreferrer" title="GitHub de Haminton">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/haminton-mena-mena-haminton/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Haminton">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %} {% block scripts %}
+<script>
+  document
+    .getElementById("registerForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+      showLoadingBar();
+
+      const formData = new FormData(this);
+      try {
+        const response = await fetch('{{ url_for("registro") }}', {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        const messageDiv = document.getElementById("message");
+        messageDiv.style.display = "block";
+
+        if (data.success) {
+          messageDiv.className = "alert alert-success mt-3";
+          messageDiv.textContent = data.message;
+          setTimeout(() => {
+            window.location.href = '{{ url_for("login") }}';
+          }, 1500);
+        } else {
+          messageDiv.className = "alert alert-danger mt-3";
+          messageDiv.textContent = data.message;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        messageDiv.className = "alert alert-danger mt-3";
+        messageDiv.textContent = "Error al procesar la solicitud";
+        messageDiv.style.display = "block";
+      }
+    });
+</script>
+
+<script>
+  document.getElementById('registerForm').addEventListener('submit', function() {
+    document.getElementById('registerProgress').classList.remove('d-none');
+  });
+</script>
+
+<script>
+  // Validación del formulario
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    
+    // Validación personalizada para confirmar contraseña
+    var password = document.getElementById("password")
+    var confirm_password = document.getElementById("confirm_password")
+
+    function validatePassword(){
+      if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Las contraseñas no coinciden")
+      } else {
+        confirm_password.setCustomValidity('')
+      }
+    }
+
+    password.onchange = validatePassword
+    confirm_password.onkeyup = validatePassword
+
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>
+{% endblock %}

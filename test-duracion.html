@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Cálculo de Duración</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #000;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #111;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1, h2 {
+            color: #0070f3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #222;
+        }
+        .result {
+            font-weight: bold;
+            color: #0070f3;
+        }
+        .pass {
+            color: #00cc66;
+        }
+        .fail {
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prueba de Cálculo de Duración</h1>
+        <p>Esta página prueba la precisión del algoritmo de cálculo de duración entre fechas.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Duración Esperada</th>
+                    <th>Duración Calculada</th>
+                    <th>Resultado</th>
+                </tr>
+            </thead>
+            <tbody id="resultados">
+                <!-- Los resultados se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Función para calcular la duración entre dos fechas
+        function calcularDuracionPrecisa(inicio, fin) {
+            // Obtener año y mes de cada fecha
+            let añoInicio = inicio.getFullYear();
+            let mesInicio = inicio.getMonth();
+            let diaInicio = inicio.getDate();
+            
+            let añoFin = fin.getFullYear();
+            let mesFin = fin.getMonth();
+            let diaFin = fin.getDate();
+            
+            // Calcular diferencia en meses
+            let meses = (añoFin - añoInicio) * 12 + (mesFin - mesInicio);
+            
+            // Ajustar por días
+            if (diaFin < diaInicio) {
+                // Si el día final es menor que el inicial, restamos un mes
+                // y contamos los días desde el día inicial hasta el fin del mes
+                meses--;
+                
+                // Calcular días restantes
+                const ultimoDiaMesAnterior = new Date(añoFin, mesFin, 0).getDate();
+                const diasRestantes = ultimoDiaMesAnterior - diaInicio + diaFin;
+                return { meses, dias: diasRestantes };
+            } else if (diaFin > diaInicio) {
+                // Si el día final es mayor, los días son la diferencia simple
+                return { meses, dias: diaFin - diaInicio };
+            } else {
+                // Si los días son iguales, no hay días adicionales
+                return { meses, dias: 0 };
+            }
+        }
+
+        // Formatear la duración como texto
+        function formatearDuracion(duracion) {
+            let texto = '';
+            
+            if (duracion.meses > 0) {
+                texto += `${duracion.meses} ${duracion.meses === 1 ? 'mes' : 'meses'}`;
+                if (duracion.dias > 0) {
+                    texto += ` y ${duracion.dias} ${duracion.dias === 1 ? 'día' : 'días'}`;
+                }
+            } else {
+                texto = `${duracion.dias} ${duracion.dias === 1 ? 'día' : 'días'}`;
+            }
+            
+            return texto;
+        }
+
+        // Casos de prueba
+        const pruebas = [
+            {
+                inicio: new Date(2025, 2, 14), // 14/03/2025
+                fin: new Date(2025, 8, 13),    // 13/09/2025
+                esperado: "5 meses y 30 días"
+            },
+            {
+                inicio: new Date(2025, 0, 15), // 15/01/2025
+                fin: new Date(2025, 3, 15),    // 15/04/2025
+                esperado: "3 meses"
+            },
+            {
+                inicio: new Date(2025, 0, 31), // 31/01/2025
+                fin: new Date(2025, 1, 28),    // 28/02/2025
+                esperado: "28 días"
+            },
+            {
+                inicio: new Date(2024, 1, 15), // 15/02/2024 (año bisiesto)
+                fin: new Date(2024, 2, 15),    // 15/03/2024
+                esperado: "1 mes"
+            },
+            {
+                inicio: new Date(2023, 11, 15), // 15/12/2023
+                fin: new Date(2024, 0, 14),     // 14/01/2024
+                esperado: "30 días"
+            },
+            {
+                inicio: new Date(2024, 2, 31), // 31/03/2024
+                fin: new Date(2024, 3, 30),    // 30/04/2024
+                esperado: "30 días"
+            }
+        ];
+
+        // Ejecutar pruebas
+        window.onload = function() {
+            const tbody = document.getElementById('resultados');
+            
+            pruebas.forEach(prueba => {
+                const duracion = calcularDuracionPrecisa(prueba.inicio, prueba.fin);
+                const duracionTexto = formatearDuracion(duracion);
+                
+                const inicioFormato = `${prueba.inicio.getDate().toString().padStart(2, '0')}/${(prueba.inicio.getMonth() + 1).toString().padStart(2, '0')}/${prueba.inicio.getFullYear()}`;
+                const finFormato = `${prueba.fin.getDate().toString().padStart(2, '0')}/${(prueba.fin.getMonth() + 1).toString().padStart(2, '0')}/${prueba.fin.getFullYear()}`;
+                
+                const resultado = duracionTexto === prueba.esperado ? 'CORRECTO' : 'INCORRECTO';
+                const claseResultado = duracionTexto === prueba.esperado ? 'pass' : 'fail';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${inicioFormato}</td>
+                    <td>${finFormato}</td>
+                    <td>${prueba.esperado}</td>
+                    <td class="result">${duracionTexto}</td>
+                    <td class="${claseResultado}">${resultado}</td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        };
+    </script>
+</body>
+</html> 

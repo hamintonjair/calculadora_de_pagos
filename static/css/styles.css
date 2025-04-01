@@ -1,0 +1,86 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    border: none;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background: linear-gradient(45deg, #0062cc, #007bff);
+}
+
+.form-control, .input-group-text {
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #0062cc, #007bff);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #004e9e, #0069d9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+#resultadoResumen .card, #resultadoTabla {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Para dar formato al input del selector de fecha */
+.flatpickr-input {
+    background-color: white !important;
+}
+
+.flatpickr-day.selected {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+/* Estilos para la tabla */
+#tablaPagos tr:last-child {
+    font-weight: bold;
+    background-color: rgba(0, 123, 255, 0.15);
+}
+
+/* Estilos responsivos para móviles */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+} 

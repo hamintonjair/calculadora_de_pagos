@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="login-page">
+  <div class="login-container">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow">
+            <div class="card-header text-center py-3">
+              <h4 class="mb-0 card-title">Iniciar Sesión</h4>
+            </div>
+            <div class="card-body p-4">
+              <div class="progress mb-4 d-none" id="loginProgress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" title="Cargando..."></div>
+              </div>
+              <form method="POST" id="loginForm" action="{{ url_for('login') }}">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Correo Electrónico</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Contraseña</label>
+                  <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                  <a href="{{ url_for('registro') }}" class="btn btn-secondary">Registrarse</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer py-1">
+    <div class="container">
+      <div class="row text-center align-items-center g-0">
+        <div class="col-md-4">
+          <div class="developer-section">
+            <p class="developer-name mb-0 d-inline-block">Jhordan Solis</p>
+            <div class="developer-links d-inline-block ms-2">
+              <a href="https://github.com/yordansolis" target="_blank" rel="noopener noreferrer" title="GitHub de Jhordan">
+                <i class="fab fa-github"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/jhordan-solis/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Jhordan">
+                <i class="fab fa-linkedin"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <p class="copyright mb-0">&copy; 2024 Calculadora de Pagos</p>
+        </div>
+        <div class="col-md-4">
+          <div class="developer-section">
+            <p class="developer-name mb-0 d-inline-block">Haminton Mena</p>
+            <div class="developer-links d-inline-block ms-2">
+              <a href="https://github.com/hamintonjair" target="_blank" rel="noopener noreferrer" title="GitHub de Haminton">
+                <i class="fab fa-github"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/haminton-mena-mena-haminton/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Haminton">
+                <i class="fab fa-linkedin"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function() {
+  document.getElementById('loginProgress').classList.remove('d-none');
+});
+</script>
+{% endblock %}

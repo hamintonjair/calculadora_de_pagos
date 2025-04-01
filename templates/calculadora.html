@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+{% block title %}Calculadora de Pagos de Contratos{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Datos del Contrato</h4>
+        </div>
+        <div class="card-body">
+          <form id="calculadoraForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="valorContrato" class="form-label">Valor del Contrato</label>
+              <input
+                type="text"
+                class="form-control"
+                id="valorContrato"
+                name="valorContrato"
+                required
+                value="{{ '{:,.0f}'.format(datos.valor_contrato) if datos and datos.valor_contrato else '' }}"
+                placeholder="Ingrese valor del contrato"
+              />
+              <div class="invalid-feedback">
+                Por favor ingresa un valor numérico válido mayor a 0.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="valorMensual" class="form-label">Valor Mensual</label>
+              <input
+                type="text"
+                class="form-control"
+                id="valorMensual"
+                name="valorMensual"
+                required
+                value="{{ '{:,.0f}'.format(datos.valor_mensual) if datos and datos.valor_mensual else '' }}"
+                placeholder="Ingrese valor mensual"
+              />
+              <div class="invalid-feedback">
+                Por favor ingresa un valor numérico válido mayor a 0.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+              <input
+                type="date"
+                class="form-control"
+                id="fechaInicio"
+                name="fechaInicio"
+                required
+                value="{{ datos.fecha_inicio if datos and datos.fecha_inicio else '' }}"
+              />
+              <div class="invalid-feedback">
+                Por favor selecciona una fecha de inicio.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="fechaFin" class="form-label">Fecha de Fin</label>
+              <input
+                type="date"
+                class="form-control"
+                id="fechaFin"
+                name="fechaFin"
+                required
+                value="{{ datos.fecha_fin if datos and datos.fecha_fin else '' }}"
+              />
+              <div class="invalid-feedback">
+                Por favor selecciona una fecha de fin.
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                  <i class="fas fa-calculator fa-lg me-2"></i>
+                  Calcular
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <script>
+            // Validación del formulario
+            (function () {
+              'use strict'
+              var forms = document.querySelectorAll('.needs-validation')
+
+              // Validación de fechas
+              var fechaInicio = document.getElementById('fechaInicio')
+              var fechaFin = document.getElementById('fechaFin')
+
+              function validateDates() {
+                if (fechaInicio.value && fechaFin.value) {
+                  if (fechaInicio.value > fechaFin.value) {
+                    fechaFin.setCustomValidity('La fecha de fin debe ser posterior a la fecha de inicio')
+                  } else {
+                    fechaFin.setCustomValidity('')
+                  }
+                }
+              }
+
+              fechaInicio.onchange = validateDates
+              fechaFin.onchange = validateDates
+
+              // Validación de valores numéricos
+              var valorContrato = document.getElementById('valorContrato')
+              var valorMensual = document.getElementById('valorMensual')
+
+              function validateValues() {
+                if (valorContrato.value && valorMensual.value) {
+                  if (parseInt(valorMensual.value.replace(/[^\d]/g, '')) > parseInt(valorContrato.value.replace(/[^\d]/g, ''))) {
+                    valorMensual.setCustomValidity('El valor mensual no puede ser mayor al valor del contrato')
+                  } else {
+                    valorMensual.setCustomValidity('')
+                  }
+                }
+              }
+
+              valorContrato.onchange = validateValues
+              valorMensual.onchange = validateValues
+
+              Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                  form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                      event.preventDefault()
+                      event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                  }, false)
+                })
+            })()
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Resumen</h4>
+        </div>
+        <div class="card-body" id="resultadoResumen">
+          {% if datos %}
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <p class="mb-1"><strong>Valor Contrato:</strong></p>
+                <p class="h5">${{ '{:,.0f}'.format(datos.valor_contrato) }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1"><strong>Valor Mensual:</strong></p>
+                <p class="h5">${{ '{:,.0f}'.format(datos.valor_mensual) }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1"><strong>Valor Diario:</strong></p>
+                <p class="h5">${{ '{:,.2f}'.format(datos.valor_mensual / 30) }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1"><strong>Duración:</strong></p>
+                <p class="h5">{{ datos.duracion }}</p>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-1"><strong>Días Totales:</strong></p>
+                <p class="h5">{{ datos.dias_totales }}</p>
+              </div>
+              <div class="col-12">
+                <p class="mb-1"><strong>Período:</strong></p>
+                <p class="h5">{{ datos.fecha_inicio }} - {{ datos.fecha_fin }}</p>
+              </div>
+              <div class="col-12">
+                <p class="mb-1"><strong>Diferencia:</strong></p>
+                <p class="h5">${{ '{:,.0f}'.format(datos.diferencia) }}</p>
+              </div>
+            </div>
+          {% else %}
+            <div class="text-center text-muted">
+              Ingrese los datos del contrato para ver el resumen
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Tabla de Pagos</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover" id="tablaPagos">
+              <thead>
+                <tr>
+                  <th scope="col" class="text-center">#</th>
+                  <th scope="col" class="text-center">Fecha Inicio</th>
+                  <th scope="col" class="text-center">Fecha Fin</th>
+                  <th scope="col" class="text-center">Días</th>
+                  <th scope="col" class="text-end">Valor Mensual</th>
+                  <th scope="col" class="text-end">Valor Diario</th>
+                  <th scope="col" class="text-end">Valor Pago</th>
+                  <th scope="col" class="text-end">Porcentaje (%)</th>
+                  <th scope="col" class="text-end">Porcentaje Acumulado (%)</th>
+                  <th scope="col" class="text-end">Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if datos and datos.pagos %}
+                  {% for pago in datos.pagos %}
+                    <tr>
+                      <td class="text-center">{{ loop.index }}</td>
+                      <td class="text-center">{{ pago.fecha_inicio }}</td>
+                      <td class="text-center">{{ pago.fecha_fin }}</td>
+                      <td class="text-center">{{ pago.dias }}</td>
+                      <td class="text-end">${{ '{:,.0f}'.format(pago.valor_mensual) }}</td>
+                      <td class="text-end">${{ '{:,.2f}'.format(pago.valor_diario) }}</td>
+                      <td class="text-end">${{ '{:,.0f}'.format(pago.valor_pago) }}</td>
+                      <td class="text-end">{{ pago.porcentaje }}%</td>
+                      <td class="text-end">{{ pago.porcentaje_acumulado }}%</td>
+                      <td class="text-end">${{ '{:,.0f}'.format(pago.saldo) }}</td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer py-1">
+  <div class="container">
+    <div class="row text-center align-items-center g-0">
+      <div class="col-md-4">
+        <div class="developer-section">
+          <p class="developer-name mb-0 d-inline-block">Jhordan Solis</p>
+          <div class="developer-links d-inline-block ms-2">
+            <a href="https://github.com/yordansolis" target="_blank" rel="noopener noreferrer" title="GitHub de Jhordan">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/jhordan-solis/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Jhordan">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <p class="copyright mb-0">&copy; 2024 Calculadora de Pagos</p>
+      </div>
+      <div class="col-md-4">
+        <div class="developer-section">
+          <p class="developer-name mb-0 d-inline-block">Haminton Mena</p>
+          <div class="developer-links d-inline-block ms-2">
+            <a href="https://github.com/hamintonjair" target="_blank" rel="noopener noreferrer" title="GitHub de Haminton">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/haminton-mena-mena-haminton/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Haminton">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Configuración de flatpickr
+    flatpickr.localize(flatpickr.l10n.es);
+    const fechaConfig = {
+      dateFormat: "d/m/Y",
+      allowInput: true,
+      theme: document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light",
+      locale: "es",
+      minDate: "today",
+      altInput: true,
+      altFormat: "d/m/Y",
+      disableMobile: false
+    };
+    flatpickr("#fechaInicio", fechaConfig);
+    flatpickr("#fechaFin", fechaConfig);
+
+    // Función para formatear números en los inputs
+    function formatearNumero(input) {
+      input.addEventListener("input", function (e) {
+        let valor = e.target.value.replace(/[^\d]/g, "");
+        if (valor) {
+          valor = new Intl.NumberFormat("es-CO").format(parseInt(valor));
+          e.target.value = valor;
+        }
+      });
+
+      input.addEventListener("blur", function (e) {
+        if (!e.target.value) {
+          e.target.value = "0";
+        }
+        let valor = e.target.value.replace(/[^\d]/g, "");
+        if (valor) {
+          e.target.value = new Intl.NumberFormat("es-CO").format(parseInt(valor));
+        }
+      });
+
+      input.addEventListener("focus", function (e) {
+        let valor = e.target.value.replace(/[^\d]/g, "");
+        e.target.value = valor;
+      });
+    }
+
+    // Aplicar formato a los campos numéricos
+    formatearNumero(document.getElementById("valorContrato"));
+    formatearNumero(document.getElementById("valorMensual"));
+
+    // Actualizar tema de flatpickr cuando cambia el tema de la página
+    document.addEventListener("themeChanged", function(e) {
+      const theme = e.detail.theme;
+      const inputs = document.querySelectorAll(".flatpickr-input");
+      inputs.forEach(input => {
+        if (input._flatpickr) {
+          input._flatpickr.destroy();
+        }
+        flatpickr(input, {
+          ...fechaConfig,
+          theme: theme === "dark" ? "dark" : "light"
+        });
+      });
+    });
+
+    function calcularPagosContrato() {
+      const valorContrato = document.getElementById('valorContrato').value.replace(/[^\d]/g, "");
+      const valorMensual = document.getElementById('valorMensual').value.replace(/[^\d]/g, "");
+      const fechaInicio = document.getElementById('fechaInicio').value;
+      const fechaFin = document.getElementById('fechaFin').value;
+
+      const inicio = new Date(fechaInicio);
+      const fin = new Date(fechaFin);
+      const diffTime = Math.abs(fin - inicio);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const meses = Math.floor(diffDays / 30);
+      const dias = diffDays % 30;
+
+      let duracionTexto = "";
+      if (meses > 0) {
+        duracionTexto += `${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+      }
+      if (dias > 0) {
+        if (meses > 0) duracionTexto += " y ";
+        duracionTexto += `${dias} ${dias === 1 ? 'día' : 'días'}`;
+      }
+
+      document.getElementById('resultadoResumen').innerHTML = `
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <p class="mb-1"><strong>Valor Contrato:</strong></p>
+            <p class="h5">$${valorContrato.toLocaleString()}</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="mb-1"><strong>Valor Mensual:</strong></p>
+            <p class="h5">$${valorMensual.toLocaleString()}</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="mb-1"><strong>Valor Diario:</strong></p>
+            <p class="h5">$${(valorMensual / 30).toLocaleString('es-CO', { minimumFractionDigits: 2 })}</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="mb-1"><strong>Duración:</strong></p>
+            <p class="h5">${duracionTexto}</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="mb-1"><strong>Días Totales:</strong></p>
+            <p class="h5">${diffDays}</p>
+          </div>
+          <div class="col-12">
+            <p class="mb-1"><strong>Período:</strong></p>
+            <p class="h5">${fechaInicio} - ${fechaFin}</p>
+          </div>
+          <div class="col-12">
+            <p class="mb-1"><strong>Diferencia:</strong></p>
+            <p class="h5">$${(valorContrato - valorMensual).toLocaleString()}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('calculadoraForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      calcularPagosContrato();
+    });
+  });
+</script>
+
+<script>
+  // Función para formatear número con separadores de miles
+  function formatearNumero(input) {
+    // Guardar la posición del cursor
+    let cursorPosition = input.selectionStart;
+    
+    // Eliminar caracteres no numéricos
+    let valorSinFormato = input.value.replace(/[^\d]/g, '');
+    
+    // Formatear con separadores de miles
+    let valorFormateado = new Intl.NumberFormat('es-CO').format(valorSinFormato);
+    
+    // Establecer el valor formateado
+    input.value = valorFormateado;
+    
+    // Ajustar la posición del cursor
+    let diferencia = valorFormateado.length - input.value.length;
+    input.setSelectionRange(cursorPosition + diferencia, cursorPosition + diferencia);
+  }
+
+  // Agregar evento de escucha a los campos de valor
+  document.getElementById('valorContrato').addEventListener('input', function() {
+    formatearNumero(this);
+  });
+
+  document.getElementById('valorMensual').addEventListener('input', function() {
+    formatearNumero(this);
+  });
+</script>
+{% endblock %}

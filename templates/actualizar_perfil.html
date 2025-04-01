@@ -1,0 +1,265 @@
+{% extends "base.html" %} {% block title %}Actualizar Perfil - Calculadora{%
+endblock %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-center">Actualizar Perfil</h3>
+      </div>
+      <div class="card-body">
+        <form method="POST" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombres</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nombre"
+              name="nombre"
+              value="{{ user.nombre }}"
+              pattern="[A-Za-zÁáÉéÍíÓóÚúÑñ\s]{2,50}"
+              required
+            />
+            <div class="invalid-feedback">
+              El nombre debe tener entre 2 y 50 caracteres y solo puede contener letras.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="apellido" class="form-label">Apellidos</label>
+            <input
+              type="text"
+              class="form-control"
+              id="apellido"
+              name="apellido"
+              value="{{ user.apellido }}"
+              pattern="[A-Za-zÁáÉéÍíÓóÚúÑñ\s]{2,50}"
+              required
+            />
+            <div class="invalid-feedback">
+              El apellido debe tener entre 2 y 50 caracteres y solo puede contener letras.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="cedula" class="form-label">Cédula</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cedula"
+              name="cedula"
+              value="{{ user.cedula }}"
+              pattern="[0-9]{8,12}"
+              required
+            />
+            <div class="invalid-feedback">
+              La cédula debe tener entre 8 y 12 dígitos.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              value="{{ user.email }}"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor ingresa un correo electrónico válido.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="telefono"
+              name="telefono"
+              value="{{ user.telefono }}"
+              pattern="[0-9]{10}"
+              required
+            />
+            <div class="invalid-feedback">
+              El teléfono debe tener 10 dígitos.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <textarea
+              class="form-control"
+              id="direccion"
+              name="direccion"
+              rows="2"
+              required
+            >{{ user.direccion }}</textarea>
+            <div class="invalid-feedback">
+              Por favor ingresa una dirección válida.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="current_password" class="form-label">Contraseña Actual</label>
+            <input
+              type="password"
+              class="form-control"
+              id="current_password"
+              name="current_password"
+              placeholder="Ingresa tu contraseña actual"
+              required
+            />
+            <div class="invalid-feedback">
+              Por favor ingresa tu contraseña actual.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="new_password" class="form-label">Nueva Contraseña (opcional)</label>
+            <input
+              type="password"
+              class="form-control"
+              id="new_password"
+              name="new_password"
+              placeholder="Nueva contraseña"
+              pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+            />
+            <div class="invalid-feedback">
+              La contraseña debe tener al menos 8 caracteres, una letra y un número.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirmar Nueva Contraseña</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirm_password"
+              name="confirm_password"
+              placeholder="Confirma tu nueva contraseña"
+            />
+            <div class="invalid-feedback">
+              Las contraseñas no coinciden.
+            </div>
+          </div>
+          <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{{ url_for('calculadora') }}" class="btn btn-secondary w-50">Volver</a>
+            <button type="submit" class="btn btn-primary w-50">Actualizar Perfil</button>
+          </div>
+        </form>
+        <div id="message" class="alert mt-3" style="display: none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer py-1">
+  <div class="container">
+    <div class="row text-center align-items-center g-0">
+      <div class="col-md-4">
+        <div class="developer-section">
+          <p class="developer-name mb-0 d-inline-block">Jhordan Solis</p>
+          <div class="developer-links d-inline-block ms-2">
+            <a href="https://github.com/yordansolis" target="_blank" rel="noopener noreferrer" title="GitHub de Jhordan">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/jhordan-solis/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Jhordan">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <p class="copyright mb-0">&copy; 2024 Calculadora de Pagos</p>
+      </div>
+      <div class="col-md-4">
+        <div class="developer-section">
+          <p class="developer-name mb-0 d-inline-block">Haminton Mena</p>
+          <div class="developer-links d-inline-block ms-2">
+            <a href="https://github.com/hamintonjair" target="_blank" rel="noopener noreferrer" title="GitHub de Haminton">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/haminton-mena-mena-haminton/" target="_blank" rel="noopener noreferrer" title="LinkedIn de Haminton">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document
+    .getElementById("actualizarPerfilForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+      showLoadingBar();
+
+      const formData = new FormData(this);
+      try {
+        const response = await fetch('{{ url_for("actualizar_perfil") }}', {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        const messageDiv = document.getElementById("message");
+        messageDiv.style.display = "block";
+
+        if (data.success) {
+          messageDiv.className = "alert alert-success mt-3";
+          messageDiv.textContent = data.message;
+          setTimeout(() => {
+            window.location.href = '{{ url_for("calculadora") }}';
+          }, 1500);
+        } else {
+          messageDiv.className = "alert alert-danger mt-3";
+          messageDiv.textContent = data.message;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        messageDiv.className = "alert alert-danger mt-3";
+        messageDiv.textContent = "Error al procesar la solicitud";
+        messageDiv.style.display = "block";
+      }
+    });
+</script>
+
+<script>
+  // Validación del formulario
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    
+    // Validación personalizada para confirmar contraseña
+    var newPassword = document.getElementById("new_password")
+    var confirmPassword = document.getElementById("confirm_password")
+
+    function validatePassword() {
+      if (newPassword.value) {
+        confirmPassword.required = true
+        if (newPassword.value !== confirmPassword.value) {
+          confirmPassword.setCustomValidity("Las contraseñas no coinciden")
+        } else {
+          confirmPassword.setCustomValidity('')
+        }
+      } else {
+        confirmPassword.required = false
+        confirmPassword.setCustomValidity('')
+      }
+    }
+
+    newPassword.onchange = validatePassword
+    confirmPassword.onkeyup = validatePassword
+
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>
+{% endblock %}
