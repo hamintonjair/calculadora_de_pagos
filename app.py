@@ -282,6 +282,9 @@ def registro():
             if db.users.find_one({'email': user_data['email']}):
                 flash('Este correo electrónico ya está registrado.', 'warning')
                 return redirect(url_for('registro'))
+            if db.users.find_one({'cedula': user_data['cedula']}):
+                flash('Esta cédula ya está registrada.', 'warning')
+                return redirect(url_for('registro'))
             
             db.users.insert_one(user_data)
             flash('¡Registro exitoso! Por favor, inicia sesión.', 'success')
@@ -341,4 +344,5 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
