@@ -1,35 +1,42 @@
-.footer {
-  background-color: var(--bs-dark);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+html[data-theme="light"] .footer, html[data-theme="dark"] .footer {
+  background-color: var(--footer-bg) !important;
+  color: var(--text-primary) !important;
+  border-top: 1px solid var(--border-color);
   margin-top: 2rem;
 }
+
+html[data-theme="light"] .footer,
+html[data-theme="light"] .footer * {
+  color: #fff !important;
+}
+
 
 .footer-title {
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--bs-light);
+  color: var(--text-secondary);
 }
 
 .developer-name {
   font-size: 0.9rem;
-  color: var(--bs-light);
+  color: var(--text-secondary);
 }
 
 .developer-links a {
-  color: var(--bs-light);
+  color: var(--text-secondary);
   margin: 0 0.3rem;
   font-size: 1rem;
   transition: color 0.2s;
 }
 
 .developer-links a:hover {
-  color: var(--bs-primary);
+  color: var(--accent-color);
 }
 
 .copyright {
   font-size: 0.8rem;
-  color: var(--bs-light);
+  color: var(--text-secondary);
 }
 
 /* Tema claro */

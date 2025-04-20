@@ -1,0 +1,19 @@
+html[data-theme="light"] .navbar,
+html[data-theme="light"] .navbar * {
+  color: #fff !important;
+  fill: #fff !important;
+  border-color: #fff !important;
+}
+
+html[data-theme="light"] .navbar .navbar-toggler-icon {
+  background-image: none !important;
+}
+
+html[data-theme="light"] .navbar .navbar-toggler-icon::before,
+html[data-theme="light"] .navbar .navbar-toggler-icon::after {
+  background-color: #fff !important;
+}
+
+html[data-theme="light"] .navbar {
+  background-color: var(--navbar-bg) !important;
+}
